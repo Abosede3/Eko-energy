@@ -17,6 +17,10 @@ connectDB()
 // API Routes
 app.use('/users', userRoute)
 
+// Testing API
+app.get('/', (req, res) => {
+ res.send('Api Working')
+})
 
 const PORT = process.env.PORT || 5000
 

@@ -443,6 +443,5 @@ router.post('/login', (req, res) => {
 
 
 
-
 // Exporting router
 module.exports = router
