@@ -3,11 +3,11 @@ const Schema = mongoose.Schema
 
 const PasswordResetSchema = new Schema({
   userId: String,
-  uniqueString: String,
+  resetString: String, // Corrected field name
   createdAt: Date,
   expiresAt: Date,
 })
 
-const PasswordReset = mongoose.model('passwordReset', PasswordResetSchema)
+const PasswordReset = mongoose.model('PasswordReset', PasswordResetSchema)
 
 module.exports = PasswordReset

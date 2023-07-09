@@ -14,6 +14,7 @@ const nodemailer = require('nodemailer') // mail handler
 const { v4: uuidv4 } = require('uuid') // unique string
 require("dotenv").config()
 const path = require('path')
+const { error } = require('console')
 
 // Node mailer configuration
 
@@ -435,7 +436,7 @@ router.post('/login', (req, res) => {
 
 
 // Password Reset
-router.get('/requestresetpassword', (req, res) => {
+router.post('/requestResetPassword', (req, res) => {
   const { email, redirectUrl } = req.body;
 
   User
@@ -473,7 +474,7 @@ router.get('/requestresetpassword', (req, res) => {
 // Sent email function
 
 const sendResetEmail = ({ _id, email }, redirectUrl, res) => {
-  const resetString = uuidv4 + _id;
+  const resetString = uuidv4() + _id;
 
   PasswordReset
     .deleteMany({userId: _id})
@@ -484,7 +485,7 @@ const sendResetEmail = ({ _id, email }, redirectUrl, res) => {
               to: email,
               subject: 'Password Reset Link',
               html: `<p>You want to sent your password </b> Click <a href=${
-                redirectUrl + '/' + _id + '/' + resetString
+                redirectUrl + _id + '/' + resetString
               }> here</a> to proceed   </p>`,
             } 
 
@@ -546,6 +547,114 @@ const sendResetEmail = ({ _id, email }, redirectUrl, res) => {
       }) 
     })
 }
+
+
+router.post('/resetPassword', (req, res) => {
+  let { userId, resetString, newPassword } = req.body  
+  
+  PasswordReset
+    .find({userId})
+    .then(result => {
+      if (result.length > 0) {
+        
+        const { expiresAt } = result[0]
+        const hashedResetString = result[0].resetString;
+        if(expiresAt <  Date.now()) {
+          PasswordReset
+            .deleteOne({userId})
+            .then(() => {
+              // reset record successfully delete
+               res.json({
+                 status: 'FAILED',
+                 message: 'Reset Link has expired',
+               }) 
+            })
+            .catch(error => {
+              console.log(error)
+                 res.json({
+                 status: 'FAILED',
+                 message: 'Password reset request not found',
+               }) 
+            })
+          
+        } else {    
+          bcrypt
+            .compare(resetString, hashedResetString)
+            .then((result) => {
+              if (result) {
+                const saltRounds = 10;
+                bcrypt
+                  .hash(newPassword, saltRounds)
+                  .then(hashedNewPassword => {
+                    User.updateOne(
+                      { _id: userId },
+                      { password: hashedNewPassword }
+                    )
+                      .then(() => {
+                        PasswordReset.deleteOne({ userId })
+                          .then(() => {
+                            res.json({
+                              status: 'Successful',
+                              message: 'Password has been sent successfully',
+                            })
+                          })
+                          .catch(error => {
+                            console.log(error)
+                            res.json({
+                              status: 'FAILED',
+                              message:
+                                'An error occurred while hashing new password',
+                            })
+                          })
+                      })
+                      .catch(error => {
+                        console.log(error)
+                        res.json({
+                          status: 'FAILED',
+                          message:
+                            'An error occurred while hashing new password',
+                        })
+                      })
+                  })
+                  .catch(error => {
+                    console.log(error)
+                     res.json({
+                      status: 'FAILED',
+                      message: 'An error occurred while hashing new password',
+                    })
+                  })
+              }
+            })
+            .catch(error => {
+              res.json({
+                status: 'FAILED',
+                message: 'Invalid password details passed',
+              })
+            })
+
+        }
+      } else {
+        res.json({
+          status: 'FAILED',
+          message: 'Password reset request not found',
+        }) 
+      }
+    })
+    .catch(error => {
+      console.log(error)
+      res.json({
+        status: 'FAILED',
+        message: 'An error occurred while checking for password reset failed!',
+      }) 
+    })
+})
+
+
+
+
+
+
+
 
 // Exporting router
 module.exports = router

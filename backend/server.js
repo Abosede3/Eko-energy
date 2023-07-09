@@ -1,6 +1,6 @@
 const express = require('express')
 const dotenv = require('dotenv') // contenting to .env file 
-const connectDB = require('./Config/db') // Connecting to the database
+const connectDB = require('./config/db') // Connecting to the database
 const userRoute = require('./api/userRoute')
 
 const cors = require('cors')
