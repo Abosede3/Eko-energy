@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Email Verification</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    .success {
+      color: green;
+    }
+    
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Email Verification</h1>
+  
+  <div id="verification-status"></div>
+
+  <script>
+    // Get the URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+    const message = urlParams.get('message');
+
+    // Get the verification status element
+    const verificationStatusElement = document.getElementById("verification-status");
+
+    // Display the appropriate message based on the URL parameters
+    if (error === 'true') {
+      verificationStatusElement.innerHTML = '<p class="error">' + message + '</p>';
+    } else {
+      verificationStatusElement.innerHTML = '<p class="success">Email verification successful!</p>';
+    }
+  </script>
+</body>
+</html>

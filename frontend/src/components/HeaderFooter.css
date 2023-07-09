@@ -1,0 +1,29 @@
+.navBG{
+ background-color: #2E0F38;
+}
+
+.navlink{
+ color: #fff !important;
+}
+
+
+.navink{
+color: #fff;
+}
+
+.custom-search{
+ width:233px;
+}
+
+footer{
+ background-color: #8352A8;
+ position: relative;
+ bottom: 0;
+ display: flex;
+ justify-content: center;
+ width: 100%;
+}
+
+.footer{
+ color: #fff;
+}
