@@ -1,7 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../models/userModel') // 
+
+
 const UserVerify = require('../models/UserVerify')
+const User = require('../models/userModel') // 
+const PasswordReset = require('../models/PasswordReset')
+
+
+
 
 const bcrypt = require('bcrypt') // password hashing
 const nodemailer = require('nodemailer') // mail handler 
@@ -202,9 +208,6 @@ const sendVerificationEmail = ({ _id, email }, res) => {
     html: `<p>Verify your email address to complete the sign up and login into account</p> <p>This link <b>expires in 30 minutes </b> Click <a href=${url + "users/verify/" + _id + "/" +  uniqueString}> here</a> to proceed   </p>`,
   } 
 
-
-
-
   const saltRounds = 10;
   bcrypt
     .hash(uniqueString, saltRounds)
@@ -220,16 +223,6 @@ const sendVerificationEmail = ({ _id, email }, res) => {
       newUserVerify
         .save()
         .then(() => {
-          // transporter
-          //   .mailOptions()
-          //   .then(() => {
-          //     // Verification send and save
-
-          //     res.json({
-          //       status: "PENDING",
-          //       message: "Verification Email Sent Successfully"
-          //     })
-          //   })
           transporter
             .sendMail(mailOptions)
             .then(() => {
@@ -441,7 +434,118 @@ router.post('/login', (req, res) => {
 }) // Login router ends
 
 
+// Password Reset
+router.get('/requestresetpassword', (req, res) => {
+  const { email, redirectUrl } = req.body;
 
+  User
+    .find({ email })
+    .then((data) => {
+      if (data.length) {
+        
+
+        // check if user has been verified
+           if (!data[0].isVerified) {
+             res.json({
+               status: 'FAILED',
+               message: "Email hasn't been verified yet. proceed to verify  ",
+             })
+           } else {
+             sendResetEmail(data[0], redirectUrl, res)
+           }
+
+      } else {  
+        res.json({
+          status: 'FAILED',
+          message: 'User account was not found!',
+        }) 
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      res.json({
+        status: 'FAILED',
+        message: 'An error occurred while checking for existing user!',
+      }) 
+    })
+})
+
+// Sent email function
+
+const sendResetEmail = ({ _id, email }, redirectUrl, res) => {
+  const resetString = uuidv4 + _id;
+
+  PasswordReset
+    .deleteMany({userId: _id})
+    .then((result) => {
+      // Now we can sent the reset email
+            const mailOptions = {
+              from: process.env.EMAIL_USER,
+              to: email,
+              subject: 'Password Reset Link',
+              html: `<p>You want to sent your password </b> Click <a href=${
+                redirectUrl + '/' + _id + '/' + resetString
+              }> here</a> to proceed   </p>`,
+            } 
+
+      // hashing the resetSting
+           const saltRounds = 10;
+      bcrypt
+        .hash(resetString,saltRounds  )
+        .then((hashedResetString) => {
+          const newPasswordReset = new PasswordReset({
+            userId: _id,
+            resetString:hashedResetString,
+            createdAt: Date.now(),
+            expiresAt: Date.now() + 3600000,
+          })
+          newPasswordReset
+            .save()
+            .then(() => {
+                transporter
+                  .sendMail(mailOptions)
+                  .then(() => {
+                    // Password send and save
+                    res.json({
+                      status: 'PENDING',
+                      message: 'Password Reset sent',
+                    })
+                  })
+                  .catch((error) => {
+                    console.log(error)
+                    res.json({
+                      status: 'FAILED',
+                      message: "Password Reset Failed  ",
+                    })
+        })
+              
+            })
+            .catch(error => {
+              console.log(error)
+              res.json({
+                status: 'FAILED',
+                message: 'An error occurred while saving resetString!',
+              }) 
+            })
+        })
+        .catch(error => {
+          console.log(error)
+          res.json({
+            status: 'FAILED',
+            message: 'An error occurred while hashing resetString!',
+          }) 
+        })
+
+
+    })
+    .catch(error => {
+      console.log(error)
+      res.json({
+        status: 'FAILED',
+        message: 'An error occurred while checking for existing user!',
+      }) 
+    })
+}
 
 // Exporting router
 module.exports = router

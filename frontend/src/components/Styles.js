@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Background from '../assets/background.jpg'
+import Background1 from '../assets/background1.jpg'
 import { Navbar, Form, NavDropdown } from 'react-bootstrap'
 import '../index.css'
 
@@ -339,4 +340,57 @@ d
 &:hover{
   color: ${colors.dark1}
 }
+`
+
+
+export const StyledEmailVerifyHome = styled.div`
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url(${Background1});
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0;
+  min-height: 83vh;
+  display: flex;
+  justify-content: center;
+`
+
+export const StyledInnerEmailVerify = styled.div`
+background-color: ${colors.primary};
+margin: auto;
+text-align: center;
+padding: 30px;
+border-radius: 20px;
+border: 2px solid ${colors.Hover};
+`
+
+export const StyledEmailVerifyTitle = styled.h2`
+font-size: 40px;
+font-weight: bold;
+text-transform: capitalize;
+`
+
+export const StyledEmailVerifySubtitle = styled.p`
+  font-size: 20px;
+`
+export const StyledButtonEmailVerify = styled(Link)`
+  padding: 10px;
+  /* min-width: 250px; */
+  outline: none;
+  background-color: transparent;
+  text-align: center;
+  text-decoration: none;
+  transition: ease-in-out 0.4s;
+  border-radius: 20px;
+  color: ${colors.darkBlue};
+  font-size: 16px;
+  border: 3px solid ${colors.darkBlue};
+
+  &:hover {
+    background-color: ${colors.darkBlue};
+    color: ${colors.primary};
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+  }
 `

@@ -23,12 +23,13 @@ import {ThreeDots} from 'react-loader-spinner' // importing  Loader spinner
 // Authentication and Redux
 import { connect } from 'react-redux'
 import { LoginUser } from '../Auth/actions/userActions'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 
-const SignIn = ({LoginUser}) => {
+const SignIn = ({ LoginUser }) => {
 
- const navigate = useNavigate()
+  const navigate = useNavigate()
+  const { userEmail } = useParams()
 
   return (
     <StyledContainerAuth>
@@ -36,7 +37,7 @@ const SignIn = ({LoginUser}) => {
         <FormTitle>Member Login</FormTitle>
         <Formik
           initialValues={{
-            email: '',
+            email: userEmail,
             password: '',
           }}
           validationSchema={

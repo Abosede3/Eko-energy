@@ -47,6 +47,8 @@ import Signup from './pages/Signup'
 import Signin from './pages/Signin'
 import Profile from './pages/Profile'
 import Billing from './pages/Billing'
+import EmailSent from './pages/EmailSent'
+
 
 const App = ({ authenticated }) => {
   return (
@@ -54,6 +56,7 @@ const App = ({ authenticated }) => {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/emailsent/:userEmail' element={<EmailSent />} />
         <Route
           path='/signup/*'
           element={
@@ -61,7 +64,7 @@ const App = ({ authenticated }) => {
           }
         />
         <Route
-          path='/login/*'
+          path='/login/:userEmail?/*'
           element={
             <AuthRoute component={Signin} authenticated={authenticated} />
           }

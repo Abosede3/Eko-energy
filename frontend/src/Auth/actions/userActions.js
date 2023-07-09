@@ -26,13 +26,13 @@ export const LoginUser = (
       if (data.status === "FAILED") {
         const { message } = data;
         //  check for specific error
-        if (message.includes("Credentials")) {
-          setFieldError("email", message);
-          setFieldError("password", message);
-
-        } else if (message.includes("Password")) {
-          setFieldError("password", message);
-
+        if (message.includes('Credentials')) {
+          setFieldError('email', message)
+          setFieldError('password', message)
+        } else if (message.includes('Password')) {
+          setFieldError('password', message)
+        } else if (message.toLowerCase().includes('email')) {
+          setFieldError('email', message)
         }
       } else if (data.status === "Successful") {
         const userData = data.data[0]
@@ -96,20 +96,12 @@ export const RegisterUser =
             } else if (message.includes('Confirm')) {
               setFieldError('confirmPassword', message)
             }
-
-            setSubmitting(false)
-          } else if (data.status === 'Successful') {
-            const { email, password } = credentials
-
-            dispatch(
-              LoginUser(
-                { email, password },
-                navigate,
-                setFieldError,
-                setSubmitting
-              )
-            )
+          } else if (data.status === 'PENDING') {
+            const { email } = credentials
+            navigate(`/emailsent/${email}`)
           }
+          // completed submission
+          setSubmitting(false)
         })
         .catch((err) => console.log(err))
     }

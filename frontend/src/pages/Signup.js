@@ -169,7 +169,7 @@ const Signup = ({ RegisterUser }) => {
               </StyledFieldDisplay>
               <StyledFormBtnGroup>
                 {!isSubmitting && (
-                  <StyledFormButton type='submit'>Sign In</StyledFormButton>
+                  <StyledFormButton type='submit'>Sign Up</StyledFormButton>
                 )}
                 {isSubmitting && (
                   <ThreeDots
