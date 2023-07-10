@@ -2,6 +2,7 @@ import axios from 'axios'
 import { sessionService } from 'redux-react-session'
 
 const localUrl = 'http://localhost:5000/'
+const remoteUrl = 'h'
 const currentUrl = localUrl
 
 export const LoginUser = (
