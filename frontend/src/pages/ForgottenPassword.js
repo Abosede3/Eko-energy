@@ -1,13 +1,13 @@
 import React from 'react'
 import {
-  ExtraText,
+
   FormTitle,
   StyledContainerAuth,
   StyledFormArea,
   StyledFormBtnGroup,
   StyledFormButton,
   StyledIcons,
-  TextLink,
+
 } from '../components/Styles'
 
 // Importing Formik
@@ -15,43 +15,36 @@ import { Formik, Form } from 'formik'
 import { TextInput } from '../components/FormLibs' // Form Libraries
 // =============
 
-import { FiMail, FiLock } from 'react-icons/fi' // Importing FI Icons
+import { FiMail } from 'react-icons/fi' // Importing FI Icons
 import * as Yup from 'yup' // Importing Yup for validation
-import {ThreeDots} from 'react-loader-spinner' // importing  Loader spinner 
+import { ThreeDots } from 'react-loader-spinner' // importing  Loader spinner
 // =============
 
 // Authentication and Redux
 import { connect } from 'react-redux'
-import { LoginUser } from '../Auth/actions/userActions'
+import { ForgotPassword } from '../Auth/actions/userActions'
 import { useNavigate, useParams } from 'react-router-dom'
 
-
-const SignIn = ({ LoginUser }) => {
-
+const ForgottenPassword = ({ ForgotPassword }) => {
   const navigate = useNavigate()
   const { userEmail } = useParams()
 
   return (
     <StyledContainerAuth>
       <StyledFormArea>
-        <FormTitle>Member Login</FormTitle>
+        <FormTitle>Forgot Password</FormTitle>
         <Formik
           initialValues={{
             email: userEmail,
-            password: '',
+            redirectUrl: 'http://localhost:3000/passwordreset',
           }}
           validationSchema={Yup.object({
             email: Yup.string()
               .email('Invalid email address')
               .required('Email is required'),
-            password: Yup.string()
-              .min(8, 'Password is too short')
-              .max(30, 'Password is too long')
-              .required('Password is required'),
           })}
           onSubmit={(values, { setSubmitting, setFieldError }) => {
-            console.log(values)
-            LoginUser(values, navigate, setFieldError, setSubmitting)
+            ForgotPassword(values, navigate, setFieldError, setSubmitting)
           }}
         >
           {({ isSubmitting }) => (
@@ -59,7 +52,7 @@ const SignIn = ({ LoginUser }) => {
               <TextInput
                 name='email'
                 type='email'
-                label='Email Address'
+                label='Enter your email Address'
                 placeholder='Jondoe@gmail.com'
                 icon={
                   <StyledIcons>
@@ -68,20 +61,9 @@ const SignIn = ({ LoginUser }) => {
                 }
               />
 
-              <TextInput
-                name='password'
-                type='password'
-                label='Password'
-                placeholder='************'
-                icon={
-                  <StyledIcons>
-                    <FiLock />
-                  </StyledIcons>
-                }
-              />
               <StyledFormBtnGroup>
                 {!isSubmitting && (
-                  <StyledFormButton type='submit'>Sign In</StyledFormButton>
+                  <StyledFormButton type='submit'>Reset</StyledFormButton>
                 )}
                 {isSubmitting && (
                   <ThreeDots
@@ -95,15 +77,9 @@ const SignIn = ({ LoginUser }) => {
             </Form>
           )}
         </Formik>
-        <ExtraText>
-          <TextLink to='/forgottenpassword'>Forgot Password</TextLink>
-        </ExtraText>
-        <ExtraText>
-          Create Account? <TextLink to='/signup'>Sign Up</TextLink>
-        </ExtraText>
       </StyledFormArea>
     </StyledContainerAuth>
   )
 }
 
-export default connect(null, {LoginUser})(SignIn)
+export default connect(null, { ForgotPassword })(ForgottenPassword)

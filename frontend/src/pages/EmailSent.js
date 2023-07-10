@@ -4,22 +4,61 @@ import { StyledButtonEmailVerify, StyledEmailVerifyHome, StyledEmailVerifySubtit
 
 
 const EmailSent = () => {
-  const { userEmail } = useParams()
+  const { userEmail, reset } = useParams()
 
   return (
-    <StyledEmailVerifyHome>
-      <StyledInnerEmailVerify>
-        <StyledEmailVerifyTitle>Email verification sent</StyledEmailVerifyTitle>
-        <StyledEmailVerifySubtitle>
-          A confirmation link has been sent to the email account{' '}
-          <bold>{userEmail}</bold>.{' '}
-        </StyledEmailVerifySubtitle>
-        <StyledEmailVerifySubtitle>
-          The link expires in the next 30 minutes.
-        </StyledEmailVerifySubtitle>
-        <StyledButtonEmailVerify to={`/login/${userEmail}`}>Proceed</StyledButtonEmailVerify>
-      </StyledInnerEmailVerify>
-    </StyledEmailVerifyHome>
+    <div>
+      {reset && userEmail && (
+        <StyledEmailVerifyHome>
+          <StyledInnerEmailVerify>
+            <StyledEmailVerifyTitle>Password Reset Link</StyledEmailVerifyTitle>
+            <StyledEmailVerifySubtitle>
+              A Password reset link has been sent to the email account{' '}
+              <bold>{userEmail}</bold>.{' '}
+            </StyledEmailVerifySubtitle>
+            <StyledEmailVerifySubtitle>
+              The link expires in the next 30 minutes.
+            </StyledEmailVerifySubtitle>
+          </StyledInnerEmailVerify>
+        </StyledEmailVerifyHome>
+      )}
+
+      {!reset && userEmail && (
+        <StyledEmailVerifyHome>
+          <StyledInnerEmailVerify>
+            <StyledEmailVerifyTitle>
+              Email verification sent
+            </StyledEmailVerifyTitle>
+            <StyledEmailVerifySubtitle>
+              A confirmation link has been sent to the email account kindly click on the link before you process{' '}
+              <bold>{userEmail}</bold>.{' '}
+            </StyledEmailVerifySubtitle>
+            <StyledEmailVerifySubtitle>
+              The link expires in the next 30 minutes. 
+            </StyledEmailVerifySubtitle>
+            <StyledButtonEmailVerify to={`/login/${userEmail}`}>
+              Proceed
+            </StyledButtonEmailVerify>
+          </StyledInnerEmailVerify>
+        </StyledEmailVerifyHome>
+      )}
+
+      {!reset && !userEmail && (
+        <StyledEmailVerifyHome>
+          <StyledInnerEmailVerify>
+            <StyledEmailVerifyTitle>
+             Password Reset was Successful
+            </StyledEmailVerifyTitle>
+            <StyledEmailVerifySubtitle>
+                You may click proceed to go the login page
+            </StyledEmailVerifySubtitle>
+            <StyledButtonEmailVerify to={`/login`}>
+              Login
+            </StyledButtonEmailVerify>
+          </StyledInnerEmailVerify>
+        </StyledEmailVerifyHome>
+      )}
+    </div>
   )
 }
 

@@ -11,16 +11,8 @@ import {
   TextLink,
 } from '../components/Styles'
 import { Formik, Form } from 'formik'
-import { TextInput } from '../components/FormLibs'
-import {
-  FiMail,
-  FiLock,
-  FiUser,
-  FiBook,
-  FiPhoneIncoming,
-  FiDollarSign,
-  FiEye,
-} from 'react-icons/fi'
+import { TextInput, TextInputEmail } from '../components/FormLibs'
+import { FiMail, FiLock, FiUser, FiBook, FiPhoneIncoming } from 'react-icons/fi'
 import * as Yup from 'yup'
 import { ThreeDots } from 'react-loader-spinner'
 
@@ -42,7 +34,6 @@ const Signup = ({ RegisterUser }) => {
             lastName: '',
             email: '',
             address: '',
-            accountNumber: '',
             phoneNumber: '',
             password: '',
             confirmPassword: '',
@@ -51,7 +42,6 @@ const Signup = ({ RegisterUser }) => {
             firstName: Yup.string().required('First Name is required'),
             lastName: Yup.string().required('Last Name is required'),
             address: Yup.string().required('Address is required'),
-            accountNumber: Yup.string().required('Account Number is required'),
             phoneNumber: Yup.string().required('Phone Number is required'),
             email: Yup.string()
               .email('Invalid email address')
@@ -71,7 +61,7 @@ const Signup = ({ RegisterUser }) => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <StyledFieldDisplay >
+              <StyledFieldDisplay>
                 <TextInput
                   name='firstName'
                   type='text'
@@ -96,7 +86,7 @@ const Signup = ({ RegisterUser }) => {
                 />
               </StyledFieldDisplay>
               <StyledFieldDisplay>
-                <TextInput
+                <TextInputEmail
                   name='email'
                   type='email'
                   label='Email Address'
@@ -107,27 +97,16 @@ const Signup = ({ RegisterUser }) => {
                     </StyledIcons>
                   }
                 />
-                <TextInput
-                  name='address'
-                  type='text'
-                  label='Address'
-                  placeholder='32 Oakeye Eldorado'
-                  icon={
-                    <StyledIcons>
-                      <FiBook />
-                    </StyledIcons>
-                  }
-                />
               </StyledFieldDisplay>
               <StyledFieldDisplay>
                 <TextInput
-                  name='accountNumber'
+                  name='address'
                   type='text'
-                  label='Account Number'
-                  placeholder='2299929900'
+                  label='Home Address'
+                  placeholder='21 street Hebert way'
                   icon={
                     <StyledIcons>
-                      <FiDollarSign />
+                      <FiBook />
                     </StyledIcons>
                   }
                 />

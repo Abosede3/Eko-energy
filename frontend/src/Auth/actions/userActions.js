@@ -2,7 +2,6 @@ import axios from 'axios'
 import { sessionService } from 'redux-react-session'
 
 const localUrl = 'http://localhost:5000/'
-const remoteUrl = 'h'
 const currentUrl = localUrl
 
 export const LoginUser = (
@@ -58,60 +57,60 @@ export const LoginUser = (
 
 
 
-
-
-
 // export const RegisterUser = (credentials, navigate, setFieldError, setSubmitting) => {}
 
-export const RegisterUser =
-  (credentials, navigate, setFieldError, setSubmitting) => {
+export const RegisterUser = (
+  credentials,
+  navigate,
+  setFieldError,
+  setSubmitting
+) => {
+  return (dispatch) => {
+    axios
+      .post(`${currentUrl}users/signup`, credentials, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        const { data } = response
 
-    return (dispatch) => {
-      axios
-        .post(`${currentUrl}users/signup`, credentials, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((response) => {
-          const { data } = response
+        // Checking for error
+        if (data.status === 'FAILED') {
+          const { message } = data
 
-          // Checking for error
-          if (data.status === 'FAILED') {
-            const { message } = data
-
-            if (message.includes('First')) {
-              setFieldError('firstName', message)
-            } else if (message.includes('Last')) {
-              setFieldError('lastName', message)
-            } else if (message.includes('Email')) {
-              setFieldError('email', message)
-            } else if (message.includes('Address')) {
-              setFieldError('address', message)
-            } else if (message.includes('Phone')) {
-              setFieldError('phoneNumber', message)
-            } else if (message.includes('Account')) {
-              setFieldError('accountNumber', message)
-            } else if (message.includes('Password')) {
-              setFieldError('password', message)
-            } else if (message.includes('Confirm')) {
-              setFieldError('confirmPassword', message)
-            }
-          } else if (data.status === 'PENDING') {
-            const { email } = credentials
-            navigate(`/emailsent/${email}`)
+          if (message.includes('First')) {
+            setFieldError('firstName', message)
+          } else if (message.includes('Last')) {
+            setFieldError('lastName', message)
+          } else if (message.includes('Email')) {
+            setFieldError('email', message)
+          } else if (message.includes('Address')) {
+            setFieldError('address', message)
+          } else if (message.includes('Phone')) {
+            setFieldError('phoneNumber', message)
+          } else if (message.includes('Password')) {
+            setFieldError('password', message)
+          } else if (message.includes('Confirm')) {
+            setFieldError('confirmPassword', message)
           }
-          // completed submission
-          setSubmitting(false)
-        })
-        .catch((err) => console.log(err))
-    }
+        } else if (data.status === 'PENDING') {
+          const { email } = credentials
+          navigate(`/emailsent/${email}`)
+        }
+        // completed submission
+        setSubmitting(false)
+      })
+      .catch((err) => console.log(err))
   }
+}
 
 
 
 
 
+
+// Logout Action
 export const LogoutUser = (navigate) => {
   return () => {
     sessionService.deleteSession()
@@ -121,3 +120,76 @@ export const LogoutUser = (navigate) => {
 
 }
 
+
+// request Password reset 
+export const ForgotPassword = (
+  credentials,
+  navigate,
+  setFieldError,
+  setSubmitting
+) => {
+  return () => {
+    axios
+      .post(`${currentUrl}users/requestResetPassword`, credentials, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        const { data } = response
+
+        if (data.status === 'FAILED') {
+          const { message } = data
+          //  check for specific error
+          if (
+            message.toLowerCase().includes('user') ||
+            message.toLowerCase().includes('password') ||
+            message.toLowerCase().includes('email')
+          ) {
+            setFieldError('email', message)
+          }
+        } else if (data.status === 'PENDING') {
+          const { email } = credentials
+          navigate(`/emailsent/${email}/${true}`)
+        }
+
+        // complete submission
+        setSubmitting(false)
+      })
+      .catch((err) => console.log(err))
+  }
+}
+
+
+// Resetting Password  resetPassword
+
+
+export const resetPassword = (credentials, navigate, setFieldError, setSubmitting) => {
+  return () => {
+    axios
+      .post(`${currentUrl}users/resetPassword`, credentials, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        const { data } = response
+
+        if (data.status === 'FAILED') {
+          const { message } = data
+          //  check for specific error
+          if (
+            message.toLowerCase().includes('Password'))
+          {
+            setFieldError('password', message)
+          }
+        } else if (data.status === 'Successful') {
+          navigate(`/emailsent`)
+        }
+
+        // complete submission
+        setSubmitting(false)
+      })
+      .catch((err) => console.log(err))
+  }
+}

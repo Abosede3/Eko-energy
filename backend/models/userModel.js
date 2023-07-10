@@ -17,11 +17,6 @@ const userSchema = new Schema(
       unique: true,
       lowercase: true,
     },
-    accountNumber: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     phoneNumber: {
       type: String,
       required: true,

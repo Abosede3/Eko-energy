@@ -48,7 +48,6 @@ router.post('/signup', (req, res) => {
     email,
     address,
     phoneNumber,
-    accountNumber,
     password,
     confirmPassword
  } = req.body
@@ -59,12 +58,11 @@ router.post('/signup', (req, res) => {
    email =  email.trim()
    address =  address.trim()
    phoneNumber =  phoneNumber.trim()
-   accountNumber =    accountNumber.trim()
    password = password.trim()
    confirmPassword = confirmPassword.trim()
  
  // checking to see if any variable is empty
- if (firstName == "" || lastName == "" || email == "" || address == "" || phoneNumber == "" || accountNumber == "" || password == "" || confirmPassword == "") {
+ if (firstName == "" || lastName == "" || email == "" || address == "" || phoneNumber == ""  || password == "" || confirmPassword == "") {
   
   // if any variable is empty
   res.json({
@@ -100,12 +98,6 @@ router.post('/signup', (req, res) => {
   res.json({
     status: 'FAILED',
     message: 'Invalid Phone Number',
-  })
- }
- else if (!/^\d{8,12}$/.test(accountNumber)) {
-  res.json({
-    status: 'FAILED',
-    message: 'Invalid Account Number'
   })
  }
  else if (password.length < 8) {
@@ -145,7 +137,6 @@ router.post('/signup', (req, res) => {
        email,
        address,
        phoneNumber,
-       accountNumber,
        password: hashedPassword,
        isVerified: false,
       //  confirmPassword,
@@ -196,17 +187,23 @@ router.post('/signup', (req, res) => {
 
 // Email verification 
 
-const sendVerificationEmail = ({ _id, email }, res) => {
+const sendVerificationEmail = ({ _id, email, firstName }, res) => {
   
   const url = "http://localhost:5000/"
   const uniqueString = uuidv4() + _id;
-
+  const appName = 'Eko Energy';
+  const supportEmail = 'support@ekoenergy.com'
   // mailer options
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
     subject: 'Email Verification',
-    html: `<p>Verify your email address to complete the sign up and login into account</p> <p>This link <b>expires in 30 minutes </b> Click <a href=${url + "users/verify/" + _id + "/" +  uniqueString}> here</a> to proceed   </p>`,
+    // html: `<p>Verify your email address to complete the sign up and login into account</p> <p>This link <b>expires in 30 minutes </b> Click <a href=${url + "users/verify/" + _id + "/" +  uniqueString}> here</a> to proceed   </p>`,
+    html: `<p>Hello, ${firstName} </p>
+            <p>Thank you for signing up with Eko Energy. To complete your registration, please click on the link below to verify your email address:</p><a href=${url + 'users/verify/' + _id + '/' + uniqueString}>Verify Email Address</a>
+            <p>If you did not create an account on ${appName}, please ignore this email.</p>
+            <p>By verifying your email address, you will be able to access all the features of our app and receive important notifications.</p>
+            <p>If you have any questions or need further assistance, please don't hesitate to contact our support team at ${supportEmail} .</p><p>Best regards,<br>${appName} Team</p>`,
   } 
 
   const saltRounds = 10;
@@ -473,20 +470,27 @@ router.post('/requestResetPassword', (req, res) => {
 
 // Sent email function
 
-const sendResetEmail = ({ _id, email }, redirectUrl, res) => {
+const sendResetEmail = ({ _id, email , firstName}, redirectUrl, res) => {
   const resetString = uuidv4() + _id;
+  const appName = 'Eko Energy'
+  const supportEmail = 'support@ekoenergy.com'
 
   PasswordReset
     .deleteMany({userId: _id})
     .then((result) => {
       // Now we can sent the reset email
+
             const mailOptions = {
               from: process.env.EMAIL_USER,
               to: email,
-              subject: 'Password Reset Link',
-              html: `<p>You want to sent your password </b> Click <a href=${
-                redirectUrl + _id + '/' + resetString
-              }> here</a> to proceed   </p>`,
+              subject: 'Password Reset Request',
+              html: `<p>Hello, ${firstName}</p>
+                    <p>We have received a request to reset your password for Eko Energy. To proceed with the password reset, please click on the link below: </p>
+                    <a href=${redirectUrl + '/' + _id + '/' + resetString}>Reset Password</a>
+                    <p>If you did not request a password reset, please ignore this email. Your current password will remain unchanged.</p>
+                    <p>Please note that the password reset link will expire after 30 minutes, so make sure to reset your password promptly.</p>
+                    <p>If you have any questions or need further assistance, please don't hesitate to contact our support team at ${supportEmail}</p>
+                    <p>Best regards,<br>${appName} Team</p>`,
             } 
 
       // hashing the resetSting
@@ -548,6 +552,7 @@ const sendResetEmail = ({ _id, email }, redirectUrl, res) => {
     })
 }
 
+// pASSWORD RESET
 
 router.post('/resetPassword', (req, res) => {
   let { userId, resetString, newPassword } = req.body  

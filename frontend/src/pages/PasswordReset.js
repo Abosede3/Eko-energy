@@ -1,13 +1,11 @@
 import React from 'react'
 import {
-  ExtraText,
   FormTitle,
   StyledContainerAuth,
   StyledFormArea,
   StyledFormBtnGroup,
   StyledFormButton,
   StyledIcons,
-  TextLink,
 } from '../components/Styles'
 
 // Importing Formik
@@ -15,63 +13,62 @@ import { Formik, Form } from 'formik'
 import { TextInput } from '../components/FormLibs' // Form Libraries
 // =============
 
-import { FiMail, FiLock } from 'react-icons/fi' // Importing FI Icons
+import { FiLock } from 'react-icons/fi' // Importing FI Icons
 import * as Yup from 'yup' // Importing Yup for validation
-import {ThreeDots} from 'react-loader-spinner' // importing  Loader spinner 
+import { ThreeDots } from 'react-loader-spinner' // importing  Loader spinner
 // =============
 
 // Authentication and Redux
 import { connect } from 'react-redux'
-import { LoginUser } from '../Auth/actions/userActions'
+import { resetPassword } from '../Auth/actions/userActions'
 import { useNavigate, useParams } from 'react-router-dom'
 
-
-const SignIn = ({ LoginUser }) => {
-
+const PasswordReset = ({ resetPassword }) => {
   const navigate = useNavigate()
-  const { userEmail } = useParams()
+  const { userId, resetString } = useParams()
 
   return (
     <StyledContainerAuth>
       <StyledFormArea>
-        <FormTitle>Member Login</FormTitle>
+        <FormTitle>Reset Password</FormTitle>
         <Formik
           initialValues={{
-            email: userEmail,
-            password: '',
+            newPassword: '',
+            confirmNewPassword: '',
+            userId,
+            resetString,
           }}
           validationSchema={Yup.object({
-            email: Yup.string()
-              .email('Invalid email address')
-              .required('Email is required'),
-            password: Yup.string()
+            newPassword: Yup.string()
               .min(8, 'Password is too short')
               .max(30, 'Password is too long')
               .required('Password is required'),
+            confirmNewPassword: Yup.string()
+              .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
+              .required('Confirm New Password is required'),
           })}
           onSubmit={(values, { setSubmitting, setFieldError }) => {
-            console.log(values)
-            LoginUser(values, navigate, setFieldError, setSubmitting)
+           resetPassword(values, navigate, setFieldError, setSubmitting)
           }}
         >
           {({ isSubmitting }) => (
             <Form>
               <TextInput
-                name='email'
-                type='email'
-                label='Email Address'
-                placeholder='Jondoe@gmail.com'
+                name='newPassword'
+                type='password'
+                label='New Password'
+                placeholder='************'
                 icon={
                   <StyledIcons>
-                    <FiMail />
+                    <FiLock />
                   </StyledIcons>
                 }
               />
 
               <TextInput
-                name='password'
+                name='confirmNewPassword'
                 type='password'
-                label='Password'
+                label='Confirm New Password'
                 placeholder='************'
                 icon={
                   <StyledIcons>
@@ -81,7 +78,7 @@ const SignIn = ({ LoginUser }) => {
               />
               <StyledFormBtnGroup>
                 {!isSubmitting && (
-                  <StyledFormButton type='submit'>Sign In</StyledFormButton>
+                  <StyledFormButton type='submit'>Password Reset</StyledFormButton>
                 )}
                 {isSubmitting && (
                   <ThreeDots
@@ -95,15 +92,9 @@ const SignIn = ({ LoginUser }) => {
             </Form>
           )}
         </Formik>
-        <ExtraText>
-          <TextLink to='/forgottenpassword'>Forgot Password</TextLink>
-        </ExtraText>
-        <ExtraText>
-          Create Account? <TextLink to='/signup'>Sign Up</TextLink>
-        </ExtraText>
       </StyledFormArea>
     </StyledContainerAuth>
   )
 }
 
-export default connect(null, {LoginUser})(SignIn)
+export default connect(null, { resetPassword })(PasswordReset)

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useField } from "formik";
-import { ErrorMsg, StyledIcons, StyledLabel, StyledTextInput } from './Styles'
+import { ErrorMsg, StyledIcons, StyledLabel, StyledTextInput, StyledTextInputEmail } from './Styles'
 import { FiEyeOff, FiEye } from "react-icons/fi";
 
 
@@ -19,6 +19,8 @@ export const TextInput = ({ icon, ...props }) => {
          {...props}
        />
      )}
+
+
 
      {props.type === 'password' && (
        <StyledTextInput
@@ -44,7 +46,30 @@ export const TextInput = ({ icon, ...props }) => {
      )}
    </div>
  )
-  
-  
+   
   
 }
+
+export const TextInputEmail = ({ icon, ...props }) => {
+   const [field, meta] = useField(props)
+  
+  return (
+    <div style={{ position: 'relative' }}>
+      <StyledLabel htmlFor={props.name}>{props.label}</StyledLabel>
+      <StyledTextInputEmail
+        invalid={meta.touched && meta.error}
+        {...field}
+        {...props}
+      />
+
+      <StyledIcons>{icon}</StyledIcons>
+
+      {meta.touched && meta.error ? (
+        <ErrorMsg>{meta.error}</ErrorMsg>
+      ) : (
+        <ErrorMsg style={{ visibility: 'hidden' }}>.</ErrorMsg>
+      )}
+    </div>
+  )
+}
+

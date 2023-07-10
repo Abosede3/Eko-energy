@@ -48,6 +48,8 @@ import Signin from './pages/Signin'
 import Profile from './pages/Profile'
 import Billing from './pages/Billing'
 import EmailSent from './pages/EmailSent'
+import ForgottenPassword from './pages/ForgottenPassword'
+import PasswordReset from './pages/PasswordReset'
 
 
 const App = ({ authenticated }) => {
@@ -56,7 +58,12 @@ const App = ({ authenticated }) => {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/emailsent/:userEmail' element={<EmailSent />} />
+        <Route path='/emailsent/:userEmail?/:reset?' element={<EmailSent />} />
+        <Route path='/forgottenpassword' element={<ForgottenPassword />} />
+        <Route
+          path='/passwordreset/:userId/:resetString'
+          element={<PasswordReset />}
+        />
         <Route
           path='/signup/*'
           element={

@@ -225,6 +225,36 @@ export const StyledTextInput = styled.input`
   }
 `
 
+export const StyledTextInputEmail = styled.input`
+  width: 660px;
+  padding: 11px;
+  padding-left: 60px;
+  font-size: 17px;
+  letter-spacing: 1px;
+  color: ${colors.dark1};
+  border: 2 solid ${colors.dark1};
+  border-radius: 15px;
+  display: block;
+  /* margin: 2px auto 5px auto; */
+  transition: ease-in-out 0.4s;
+  position: relative;
+
+  ${(props) =>
+    props.invalid &&
+    `background-color: ${colors.red}; color: ${colors.primary}`};
+
+  &:focus {
+    background-color: ${colors.theme};
+    border: 1px;
+  }
+
+  @media (max-width: 980px) {
+    width: 100%;
+    max-width: 320px;
+  }
+`
+
+
 export const StyledLabel = styled.p`
   text-align: left;
   font-size: 15px;
