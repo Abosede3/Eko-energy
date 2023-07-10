@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { StyledButtonEmailVerify, StyledEmailVerifyHome, StyledEmailVerifySubtitle, StyledEmailVerifyTitle, StyledInnerEmailVerify } from '../components/Styles'
+import { StyledButtonEmailVerify, StyledEmailVerifyHome, StyledEmailVerifySubtitle, StyledEmailVerifyTitle, StyledInnerEmailVerify, StyledVerifyText } from '../components/Styles'
 
 
 const EmailSent = () => {
@@ -13,8 +13,8 @@ const EmailSent = () => {
           <StyledInnerEmailVerify>
             <StyledEmailVerifyTitle>Password Reset Link</StyledEmailVerifyTitle>
             <StyledEmailVerifySubtitle>
-              A Password reset link has been sent to the email account{' '}
-              <bold>{userEmail}</bold>.{' '}
+              A password reset link has been sent to the email address{' '}
+              <StyledVerifyText>{userEmail}</StyledVerifyText>.
             </StyledEmailVerifySubtitle>
             <StyledEmailVerifySubtitle>
               The link expires in the next 30 minutes.
@@ -30,11 +30,11 @@ const EmailSent = () => {
               Email verification sent
             </StyledEmailVerifyTitle>
             <StyledEmailVerifySubtitle>
-              A confirmation link has been sent to the email account kindly click on the link before you process{' '}
-              <bold>{userEmail}</bold>.{' '}
+              A confirmation link has been sent to the email address kindly
+              click on the link before you process <StyledVerifyText>{userEmail}</StyledVerifyText>.{' '}
             </StyledEmailVerifySubtitle>
             <StyledEmailVerifySubtitle>
-              The link expires in the next 30 minutes. 
+              The link expires in the next 30 minutes.
             </StyledEmailVerifySubtitle>
             <StyledButtonEmailVerify to={`/login/${userEmail}`}>
               Proceed
@@ -47,10 +47,10 @@ const EmailSent = () => {
         <StyledEmailVerifyHome>
           <StyledInnerEmailVerify>
             <StyledEmailVerifyTitle>
-             Password Reset was Successful
+              Password Reset was Successful
             </StyledEmailVerifyTitle>
             <StyledEmailVerifySubtitle>
-                You may click proceed to go the login page
+              You may click proceed to go the login page
             </StyledEmailVerifySubtitle>
             <StyledButtonEmailVerify to={`/login`}>
               Login

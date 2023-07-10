@@ -401,7 +401,7 @@ text-transform: capitalize;
 `
 
 export const StyledEmailVerifySubtitle = styled.p`
-  font-size: 20px;
+  font-size: 16px;
 `
 export const StyledButtonEmailVerify = styled(Link)`
   padding: 10px;
@@ -423,4 +423,12 @@ export const StyledButtonEmailVerify = styled(Link)`
     border: none;
     text-decoration: none;
   }
+`
+
+// ====== Verification text
+
+export const StyledVerifyText = styled.p`
+font-size: 13px;
+font-weight: bold;
+
 `
