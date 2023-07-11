@@ -1,8 +1,12 @@
 import React from 'react'
+import { FormTitle, StyledContainerAuth, StyledEmailVerifySubtitle } from '../components/Styles'
 
 const Profile = () => {
   return (
-    <div>Profile</div>
+    <StyledContainerAuth>
+      <FormTitle>Work in progress</FormTitle>
+      <StyledEmailVerifySubtitle>It will be up and running soon</StyledEmailVerifySubtitle>
+    </StyledContainerAuth>
   )
 }
 
