@@ -79,7 +79,7 @@ const Home = ({LoginUser}) => {
                     }
                   />
                   <StyledPasswordHome>
-                    <StyledPassHome to='/resetpassword'>
+                    <StyledPassHome to='/forgottenpassword'>
                       Forgot Password
                     </StyledPassHome>
                   </StyledPasswordHome>

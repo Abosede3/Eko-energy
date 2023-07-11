@@ -198,7 +198,6 @@ const sendVerificationEmail = ({ _id, email, firstName }, res) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: 'Email Verification',
-    // html: `<p>Verify your email address to complete the sign up and login into account</p> <p>This link <b>expires in 30 minutes </b> Click <a href=${url + "users/verify/" + _id + "/" +  uniqueString}> here</a> to proceed   </p>`,
     html: `<p>Hello, ${firstName} </p>
             <p>Thank you for signing up with Eko Energy. To complete your registration, please click on the link below to verify your email address:</p><a href=${url + 'users/verify/' + _id + '/' + uniqueString}>Verify Email Address</a>
             <p>If you did not create an account on ${appName}, please ignore this email.</p>

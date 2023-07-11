@@ -36,7 +36,7 @@ const ForgottenPassword = ({ ForgotPassword }) => {
         <Formik
           initialValues={{
             email: userEmail,
-            redirectUrl: 'http://localhost:3000/passwordreset',
+            redirectUrl: 'https://ekoenergy.vercel.app/passwordreset',
           }}
           validationSchema={Yup.object({
             email: Yup.string()

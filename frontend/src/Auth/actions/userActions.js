@@ -2,7 +2,7 @@ import axios from 'axios'
 import { sessionService } from 'redux-react-session'
 
 const remoteUrl = 'https://eko-energy.vercel.app/'
-const localUrl = 'http://localhost:5000/'
+// const localUrl = 'http://localhost:5000/'
 const currentUrl = remoteUrl
 
 export const LoginUser = (
