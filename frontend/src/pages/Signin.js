@@ -50,7 +50,6 @@ const SignIn = ({ LoginUser }) => {
               .required('Password is required'),
           })}
           onSubmit={(values, { setSubmitting, setFieldError }) => {
-            console.log(values)
             LoginUser(values, navigate, setFieldError, setSubmitting)
           }}
         >
