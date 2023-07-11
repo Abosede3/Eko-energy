@@ -189,7 +189,7 @@ router.post('/signup', (req, res) => {
 
 const sendVerificationEmail = ({ _id, email, firstName }, res) => {
   
-  const url = "http://localhost:5000/"
+  const url = 'https://eko-energy-p20d7bbnt-abosede3.vercel.app/'
   const uniqueString = uuidv4() + _id;
   const appName = 'Eko Energy';
   const supportEmail = 'support@ekoenergy.com'
